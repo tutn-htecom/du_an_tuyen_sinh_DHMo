@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: "inter", sans-serif;
+}
+
+
+
+@media (max-width:1920px) {    
+    body.body-regiter-profile {
+        background-image: url('../image/bg-register-profile.jpg');
+        background-repeat: no-repeat;
+        background-size: cover ;    
+        font-family: sans-serif ;
+        position: relative;
+        height: 100vh;
+    }
+    .container {
+        position: relative;
+    }
+    body.body-regiter-profile::before { 
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left:0;
+        bottom: 0;
+        background-color: #007bff;
+        opacity: 0.5;
+    }
+    #logo-register-profile {
+        width: 180px ;
+        height: 160px ;
+    }
+    #r-profile-title {
+        font-size: 18px ;
+        /* font-family: 'Inter'; */
+        font-family: 'Inter';
+        font-weight: 400px ;
+        line-height: 26px ;
+        color: #fff ;        
+    }
+    #rTitle span{
+        text-align: center ;
+    }
+    #col-center {
+        padding-left: 6.932% ;
+        padding-right: 6.932% ;
+    }
+    .card-login {        
+        height: 462px ;      
+        padding-left: 10% ;  
+        padding-right: 10% ;  
+    }
+    #form-title {        
+        font-weight: 600 ;        
+        font-size: 18px ;
+        padding: 10px ;
+    }
+    .r-login-title {        
+        padding: 30px ;
+    }
+    #email-title {
+        font-size: 14px ;
+        line-height: 10px ;
+    }
+    .card-title {
+        font-size: 18px ;
+    }
+    /* .card, .d-logo, .d-general {
+        width: 475px  ;        
+    } */
+    .card {
+        height: 462px ;
+    }
+    .card-body {
+        border-radius: 8px ;
+       
+    }
+    #divOr{
+        border-bottom: 1px solid #ccc ;
+        padding-top: -10px ;
+        padding-bottom: 10px ;
+    }
+    .titleOr {
+        position: absolute;
+        margin-top: 0px ;        
+        width: 51px;        
+        background: #ffff ;
+        justify-content: center;
+        display: flex;        
+        margin-left: 33%;
+    }
+    .d-regiter {
+        margin-top: 35px ;
+    }
+    .d-login {
+        margin-bottom: 30px ;
+    }
+    .d-info {
+        background-image: url('../image/r-bg-left.jpg');
+        background-repeat: no-repeat;
+        background-size: cover ;    
+        height: 911px ;
+        
+    }
+    .r-container {
+        max-width: 100% ;      
+        
+    }
+}
+
+@media (max-width:1366px) {
+    body.body-regiter-profile {
+        background-image: url('../image/bg-register-profile.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;    
+        font-family: sans-serif ;
+        position: relative;
+        height: 150vh;
+    }
+    .sContent {
+        position: relative;
+    }
+    body.body-regiter-profile::before { 
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left:0;
+        bottom: 0;
+        background-color: #007bff;
+        opacity: 0.2;
+    }
+}

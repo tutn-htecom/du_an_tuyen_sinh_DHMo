@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;600;700&display=swap');
+/* loading  */
+.loading {
+    z-index: 20;
+    position: absolute;
+    top: 0;
+    left:-5px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+.loading-content {
+    position: absolute;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    top: 40%;
+    left:50%;
+    animation: spin 2s linear infinite;
+    }
+      
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+}
+
+html {
+    font-family: "Roboto";
+}
+body.b-crm-login {
+    background-image: url('../image/crm-background-login.jpg');
+}
+
+.notifyjs-corner {
+    text-align: justify;
+    font-size: 13px;
+}
+#success-msg {
+    color: #158a14;
+    font-weight: bold;
+    font-size: 14px;
+
+}
+#error-msg {
+    color: #E53935;
+    font-weight: bold;
+    font-size: 14px;
+}
+.d-password .fa-eye, .d-password .fa-eye-slash{
+    position: absolute;
+    right: 14%;
+    top: 49%;    
+}
+@media (min-width:1920px) { 
+    .lnkReister:hover{
+        font-weight: 400px;        
+    }
+    input[type=checkbox]
+    {     
+      -ms-transform: scale(1.5); /* IE */
+      -moz-transform: scale(1.5); /* FF */
+      -webkit-transform: scale(1.5); /* Safari and Chrome */
+      -o-transform: scale(1.5); /* Opera */
+      transform: scale(1.5);
+      padding: 5px;            
+    }
+    .tilte-14 {
+        font-size: 16px ;
+        font-family: Roboto;
+        font-weight: 400px;
+        line-height: 16.41px;
+    } 
+    .input-form {
+        width: 336px;
+        height: 48px;
+        border: 1px solid #EBEBEB;
+        background-color: #fff;
+        border-radius: 10px;
+    }   
+    body.b-crm-login {        
+        background-repeat: no-repeat;
+        background-size: cover ;    
+        font-family: sans-serif ;
+        position: relative;
+        height: 100vh;
+    }
+    .container {
+        position: relative;
+    }
+    body.b-crm-login::before { 
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left:0;
+        bottom: 0;
+        background-color: #007bff;
+        opacity: 0.5;
+    }    
+}
+@media (max-width:1920px) { 
+    .lnkReister:hover{
+        font-weight: 400px;        
+    }
+    input[type=checkbox]
+    {     
+      -ms-transform: scale(1.5); /* IE */
+      -moz-transform: scale(1.5); /* FF */
+      -webkit-transform: scale(1.5); /* Safari and Chrome */
+      -o-transform: scale(1.5); /* Opera */
+      transform: scale(1.5);
+      padding: 5px;            
+    }
+    .tilte-14 {
+        font-size: 16px ;
+        font-family: Roboto;
+        font-weight: 400px;
+        line-height: 16.41px;
+    } 
+    .input-form {
+        width: 336px;
+        height: 48px;
+        border: 1px solid #EBEBEB;
+        background-color: #fff;
+        border-radius: 10px;
+    }   
+    body.b-crm-login {        
+        background-repeat: no-repeat;
+        background-size: cover ;    
+        font-family: sans-serif ;
+        position: relative;
+        height: 100vh;
+    }
+    .container {
+        position: relative;
+    }
+    body.b-crm-login::before { 
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left:0;
+        bottom: 0;
+        background-color: #007bff;
+        opacity: 0.5;
+    }    
+}
+
+@media (max-width:1360px) { 
+    .lnkReister:hover{
+        font-weight: 400px;        
+    }
+    input[type=checkbox]
+    {     
+      -ms-transform: scale(1.5); /* IE */
+      -moz-transform: scale(1.5); /* FF */
+      -webkit-transform: scale(1.5); /* Safari and Chrome */
+      -o-transform: scale(1.5); /* Opera */
+      transform: scale(1.5);
+      padding: 5px;            
+    }
+    .tilte-14 {
+        font-size: 16px ;
+        font-family: Roboto;
+        font-weight: 400px;
+        line-height: 16.41px;
+    } 
+    .input-form {
+        width: 336px;
+        height: 48px;
+        border: 1px solid #EBEBEB;
+        background-color: #fff;
+        border-radius: 10px;
+    }   
+    body.b-crm-login {        
+        background-repeat: no-repeat;
+        background-size: cover ;    
+        font-family: sans-serif ;
+        position: relative;
+        height: 130vh;
+    }
+    .container {
+        position: relative;
+    }
+    body.b-crm-login::before { 
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left:0;
+        bottom: 0;
+        background-color: #007bff;
+        opacity: 0.5;
+    }    
+}
