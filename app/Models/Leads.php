@@ -12,12 +12,18 @@ class Leads extends Model
     const MALE = 1;
     const ORTHER = 2;
 
+    const REGISTER_PROFILE = 1;
+    const INFORMATION_PROFILE = 2;
+    const CONTACTS = 3;
+    const FAMILY = 4;
+    const SCORE = 5;
+    const CONFIRM = 6;
     
     const APPLY_GENDER_NUMBER = [0,1,2];    
-    const GENDER_MAP = [
-        self::FEMALE => 'Nữ',
-        self::MALE => 'Nam',
-        self::ORTHER => 'Khác',
+    const GENDER_MAP_ID = [
+        self::FEMALE => 0,
+        self::MALE => 1,
+        self::ORTHER => 2,
     ];
     const GENDER_MAP_TEXT = [
         self::FEMALE => 'Nữ',
@@ -29,7 +35,7 @@ class Leads extends Model
     protected $table = 'leads';
     protected $fillable = [
         'id','full_name','code','email','phone','home_phone','avatar','date_of_birth','gender','identification_card','date_identification_card','place_identification_card','place_of_birth','place_of_wrk_lrn','sources_id','marjors_id','nations_name','ethnics_name','date_of_join_youth_union','date_of_join_communist_party',
-        'company_name','company_address','lst_status_id','tags_id','remember_token','created_at','updated_at','deleted_at','created_by','updated_by','deleted_by', 'assignments_id'
+        'company_name','company_address','lst_status_id','tags_id','remember_token','created_at','updated_at','deleted_at','created_by','updated_by','deleted_by', 'assignments_id', 'leads_code', 'steps'
     ];
     public function create_by()
     {
@@ -80,10 +86,10 @@ class Leads extends Model
     } 
     // Văn bằng tốt nghiệp
     public function degree() {
-        return $this->hasMany(FamilyInformations::class, 'leads_id', 'id');
+        return $this->hasMany(DegreeInformations::class, 'leads_id', 'id');
     }
     public function employees() {
-        return $this->hasMany(FamilyInformations::class, 'assignments_id', 'id');
+        return $this->hasMany(employees::class, 'assignments_id', 'id');
     }
     
 }

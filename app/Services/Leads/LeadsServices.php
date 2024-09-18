@@ -6,6 +6,7 @@ use App\Exports\LeadsExport;
 use App\Imports\LeadsImport;
 use App\Imports\LeadsImports;
 use App\Models\Contacts;
+use App\Models\DegreeInformations;
 use App\Models\FamilyInformations;
 use App\Models\Leads;
 use App\Models\User;
@@ -95,6 +96,10 @@ class LeadsServices implements LeadsInterface
             "date_of_birth" => isset($params["full_date_of_birthname"]) ? trim($params["date_of_birth"]) : null,
         ];            
         $data = [
+            // Bổ sung 2 dòng
+            "leads_code"    => "SV" . rand(100000, 999999),
+            "steps"         => Leads::REGISTER_PROFILE,
+            // -------------------------------------------------
             "email"      => isset($params["email"]) ? trim($params["email"]) : null,
             "code"       => "TS" . rand(100000, 999999),
             "full_name"  => isset($params["full_name"]) ? trim($params["full_name"]) : null,
@@ -109,7 +114,8 @@ class LeadsServices implements LeadsInterface
             "place_of_birth"        => isset($params["place_of_birth"]) ?  trim($params["place_of_birth"]) : null,
             "place_of_wrk_lrn"      => isset($params["place_of_wrk_lrn"]) ? trim($params["place_of_wrk_lrn"]) : null,                
             "date_of_birth"         => isset($params["date_of_birth"]) ? Carbon::createFromFormat('d/m/Y', trim($params["date_of_birth"]))->format('Y-m-d') : null,                
-        ];                    
+        ];    
+                    
         $leads = $this->leads_repository->create($data);             
         if (isset($leads->id)) {
             $users = $this->create_users($params); 
@@ -192,9 +198,42 @@ class LeadsServices implements LeadsInterface
         }
 
     }
+    public function getParamsDegreeInformations($params, $id)
+    {
+        $prefix = config('app.data.degree_prefix');
+        $data = [];
+        foreach ($prefix as $p) {
+            $title = strtoupper($params['title_' . $p]);
+            $data[] = [
+                "title" => DegreeInformations::CONTACTS_MAP_TEXT[$title] ?? null,
+                "leads_id" => $id ?? null,
+                "type_id" => $params['type_id_' . $p] ?? null,
+                "year_of_degree" => $params['year_of_degree_' . $p] ?? null,
+                "date_of_degree" => isset($params["date_of_degree_" . $p]) ? Carbon::createFromFormat('d/m/Y', trim($params["date_of_degree_" . $p]))->format('Y-m-d') : null,
+                "serial_number_degree" => $params['serial_number_degree_' . $p] ?? null,
+                "place_of_degree" => $params['place_of_degree_' . $p] ?? null
+            ];
+        }
+        return $data;
+    }
+
+
     // cập nhật leads và thêm mới thông tin văn bằng
-    public function uPersonal($params, $id) {        
+    public function uPersonal($params, $id) {  
+        // Kiểm tra id có tồn tại trong bảng leads không
+        // -------------------------------------------------
+            $dem = $this->leads_repository->where('id', $id)->count();
+            if($dem <= 0) {
+                return [
+                    "code" => 422,
+                    "message" => "Không tim thấy thí sinh trên hệ thống",
+                ];
+            }
+        // -------------------------------------------------
         $data_leads = [
+            // Bổ sung dòng            
+            "steps"         => Leads::INFORMATION_PROFILE,
+            // -------------------------------------------------
             "avatar"        => trim($params["avatar"]),
             "date_of_birth" => Carbon::createFromFormat('d/m/Y', trim($params["date_of_birth"]))->format('Y-m-d'),
             "place_of_birth"=> trim($params["place_of_birth"]),
@@ -212,21 +251,10 @@ class LeadsServices implements LeadsInterface
         $model = $this->leads_repository->updateById($id, $data_leads);       
         
         // Thêm mới bảng văn bằng tốt nghiệp
-        $data_degree = [];
-       foreach ($params['degree_informations'] as $degree) {
-        $data_degree[] = [
-            "title"=> $degree['title'] ?? null,
-            "leads_id" => $id ?? null,
-            "students_id" => $degree['students_id'] ?? null,
-            "type_id" => $degree['type_id'] ?? null,
-            "year_of_degree" => $degree['year_of_degree'] ?? null,
-            "date_of_degree" => isset($degree["date_of_degree"]) ? Carbon::createFromFormat('d/m/Y', trim($degree["date_of_degree"]) )->format('Y-m-d') : null,
-            "serial_number_degree" => $degree['serial_number_degree'] ?? null,
-            "place_of_degree" => $degree['place_of_degree'] ?? null
-        ];
-       }
+        $data_degree = $this->getParamsDegreeInformations($params, $id);
+      
        // Thêm mới văn bằng
-        $this->degree_repository->createMultiple($data_degree);
+       $degree = $this->degree_repository->createMultiple($data_degree);
         
         $result = null;
         if($model->id && count($degree) > 0) {
@@ -271,14 +299,39 @@ class LeadsServices implements LeadsInterface
         }          
         return $data;
     }
-    public function contacts($param, $id) {       
+    public function contacts($param, $id) {  
+         // Kiểm tra id có tồn tại trong bảng leads không
+        // -------------------------------------------------
+        $dem = $this->leads_repository->where('id', $id)->count();
+        if($dem <= 0) {
+            return [
+                "code" => 422,
+                "message" => "Không tim thấy thí sinh trên hệ thống",
+            ];
+        }
+    // -------------------------------------------------
+        // Bổ sung thêm 
+        // --------------------------------------------
+        $steps = [
+            "steps"         => Leads::CONTACTS,
+        ];
+        $model = $this->leads_repository->updateById($id, $steps);
+    
+        // --------------------------------------------
         $data = $this->getParamsContacts($param, $id);                                 
-        $model = $this->contacts_repository->createMultiple($data);
-        if(count($model) > 0) {            
+        $leads = $this->contacts_repository->createMultiple($data);        
+        if(isset($leads->id)) {            
             $data = [
                 "code" => 200,
                 "message" => "Đăng ký thông tin liên lạc thành công",
-                "leads_id" => $id
+                "data" => [
+                    "id"            => $leads->id,
+                    "code"          => $leads->code ?? null,
+                    "email"         => $leads->email ?? null,
+                    "date_of_birth" => $leads->date_of_birth ?? null,
+                    "gender"        => $leads->gender ?? null,
+                    "marjors"       => $leads->marjors->name ?? null, 
+                ]
             ];
         } else {
             $data = [
@@ -310,7 +363,15 @@ class LeadsServices implements LeadsInterface
         }             
         return $data;
     }
-    public function family($params, $id) {       
+    public function family($params, $id) {    
+        // Bổ sung thêm Cập nhật vào leads
+        // --------------------------------------------
+        $steps = [
+            "steps"         => Leads::FAMILY,
+        ];
+        $this->leads_repository->updateById($id, $steps);
+        // --------------------------------------------
+        
         $data = $this->getDataFamily($params, $id);             
         $model = $this->family_repository->createMultiple($data);        
         if(count($model) > 0) {            
@@ -328,8 +389,16 @@ class LeadsServices implements LeadsInterface
         return $data;
     }
     // Thông tin xét tuyển theo bảng điểm
-    public function score($params, $id){
+    public function score($params, $id){        
         try {
+            // Bổ sung thêm 
+            // --------------------------------------------
+            $steps = [
+                "steps"         => Leads::SCORE,
+            ];
+            $this->leads_repository->updateById($id, $steps);
+
+            // --------------------------------------------
             $leads = $this->leads_repository->where('id', $id)->count();
             if ($leads <= 0) {
                 return [
@@ -360,7 +429,15 @@ class LeadsServices implements LeadsInterface
         }
     }
     // Xác nhận hồ sơ sẽ lưu vào thư mục tương ứng mới mã hồ sơ code Ts....****
-    public function confirm($params, $id){        
+    public function confirm($params, $id){ 
+        // Bổ sung thêm 
+        // --------------------------------------------
+        $steps = [
+            "steps"  => Leads::CONFIRM,
+        ];
+        $this->leads_repository->updateById($id, $steps);
+
+        // --------------------------------------------
         $data = [];
         $model = $this->leads_repository->where('id', $id)->first();
         $url = "/assets/upload/" . $model['code'] . '/';

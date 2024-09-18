@@ -101,7 +101,7 @@ Route::group([
     // Xác nhận hồ sơ
     $router->post('/confirm/{id}', [LeadsController::class, 'confirm']);
     // Login
-    $router->post('/login', [AuthController::class, 'login']);
+    $router->post('/active-users', [AuthController::class, 'active']);
 
 });
 

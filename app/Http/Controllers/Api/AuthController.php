@@ -7,6 +7,8 @@ use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\Authentication\AuthInterface;
+use Illuminate\Support\Facades\Request;
+
 class AuthController extends Controller
 {    
     protected $authInterface;
@@ -35,5 +37,10 @@ class AuthController extends Controller
     }
     public function refresh(){
         return $this->authInterface->refresh();        
+    }
+
+    public function active(Request $request){
+        $params = $request->all();
+        return $this->authInterface->active($params);
     }
 }

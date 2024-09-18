@@ -18,7 +18,7 @@ class EnsureUserIsAuthenticated
     public function handle(Request $request, Closure $next): Response
     {        
         if (!Auth::check() && (isset(Auth::user()->types) && Auth::user()->types == User::TYPE_EMPLOYEES)) {            
-            return redirect()->route('login');
+            return redirect()->route('crm.login');
         }
 
         return $next($request);

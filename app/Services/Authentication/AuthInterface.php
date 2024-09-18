@@ -10,4 +10,5 @@ interface AuthInterface
     public function refresh();
     public function userProfile();
     public function changePassWord($params);
+    public function active($params);
 }

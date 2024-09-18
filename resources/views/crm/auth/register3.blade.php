@@ -51,7 +51,7 @@
 						</div>	
 						<div class="text-center mb-5">
 							<span class="title-14">Đã có tài khoản? </span>
-							<a href="{{ route('login') }}" class="text-primary title-14 lnkReister" style="text-decoration:none;">Đăng nhập</a>
+							<a href="{{ route('crm.login') }}" class="text-primary title-14 lnkReister" style="text-decoration:none;">Đăng nhập</a>
 						</div>					
 					</div>
 				</div>

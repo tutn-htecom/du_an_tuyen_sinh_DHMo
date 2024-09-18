@@ -1,34 +1,69 @@
-# 1. Chạy migrate để build database
+# Tạo Migration 
+2024_09_19_001037_create_steps_collumn.php
 
-# 2. Cài đặt Laravel JWT
-composer require tymon/jwt-auth:^1.0.2
+# Khai báo const tại model leads
+    const REGISTER_PROFILE = 1;
+    const INFORMATION_PROFILE = 2;
+    const CONTACTS = 3;
+    const FAMILY = 4;
+    const SCORE = 5;
+    const CONFIRM = 6;
+# Gán biến với steps với các biến const theo từng bước
 
-# 3. Khai báo JWT trong app
-'providers' => [ Tymon\JWTAuth\Providers\LaravelServiceProvider::class],
-'aliases' => ['JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class, 'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class],
+# Bước 1: Đăng ký hồ sơ: action_insert()
+    "steps"         => Leads::REGISTER_PROFILE,
 
-# 4. Chạy lệnh 2 lệnh
-php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
-php artisan jwt:secret
+# Bước 2: Thông tin hồ sơ: uPersonal()
+    "steps"         => Leads::REGISTER_PROFILE,
 
-# 5. Cài đặt package mail:
-composer require illuminate/mail
+    // Kiểm tra id có tồn tại trong bảng leads không
+    // -------------------------------------------------
+    // Kiểm tra lead có id tồn tại không
+    $dem = $this->leads_repository->where('id', $id)->count();
+    if($dem <= 0) {
+        return [
+            "code" => 422,
+            "message" => "Không tim thấy thí sinh trên hệ thống",
+        ];
+    }
+    // -------------------------------------------------
+# Bước 3: Thông tin liên lạc contacts(): 
+    // Bổ sung thêm 
+    // --------------------------------------------
+    $steps = [
+        "steps"         => Leads::CONTACTS,
+    ];
+    $this->leads_repository->updateById($id, $steps);
 
-# 6. Cấu hình mail:
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=systemautosendmail@gmail.com
-MAIL_PASSWORD=esxwcyoddcyylpxy
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=systemautosendmail@gmail.com
-MAIL_FROM_NAME="${APP_NAME}"
+    // --------------------------------------------
+# Bước 4: Thông tin liên lạc family(): 
+    // Bổ sung thêm 
+    // --------------------------------------------
+    $steps = [
+        "steps"         => Leads::FAMILY,
+    ];
+    $this->leads_repository->updateById($id, $steps);
 
-# 7. Chạy lệnh: 
-php artisan make:mail SendMail
+    // --------------------------------------------
 
+# Bước 5: Thông tin xét tuyển: score();
+    // Bổ sung thêm 
+    // --------------------------------------------
+    $steps = [
+        "steps"         => Leads::SCORE,
+    ];
+    $this->leads_repository->updateById($id, $steps);
 
-php artisan migrate --path=/database/migrations/2024_08_27_144256_create_family_informations_table.php
-php artisan migrate --path=/database/migrations/2024_08_27_091738_create_students_table.php
+    // --------------------------------------------
 
-<!-- Tối về bổ sung get api các trường đại học -->
+# Bước 6: Xác nhận hồ sơ: confirm()
+    // Bổ sung thêm 
+    // --------------------------------------------
+    $steps = [
+        "steps"         => Leads::SCORE,
+    ];
+    $this->leads_repository->updateById($id, $steps);
+
+    // --------------------------------------------
+
+# Xử lý login

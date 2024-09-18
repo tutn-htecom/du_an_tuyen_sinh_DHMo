@@ -85,4 +85,23 @@ class AuthServices implements AuthInterface
         ];
         return  $data;        
     }
+    public function active($params){
+        if(!$params['email']) {
+            return [
+                "code" => 422,
+                "message" => " Vui lòng nhập địa chỉ email"
+            ];
+        }
+        $model  = $this->user_repository->where('email', $params['email'])->first();
+        if(isset($model->id)) {
+            $model->status = 1;
+            $model->save();
+        }
+        
+        return [
+            "code" => 200,
+            "message" => "Kích hoạt tài khoản thành công"
+        ];
+        
+    }
 }
